@@ -20,6 +20,7 @@ typedef struct s_cmd
 	int r_flag;
 	int t_flag;
 	char **paths;
+	int path_len;
 } t_cmd;
 
 // parser.c

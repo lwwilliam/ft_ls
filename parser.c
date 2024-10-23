@@ -43,9 +43,30 @@ void check_path(char *path, char *prog_name, int *path_count)
 	}
 }
 
+void swap(char **a, char **b) {
+    char *temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Bubble sort function
+void bubble_sort(char **paths, int count) {
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = 0; j < count - i - 1; j++) {
+            if (ft_strncmp(paths[j], paths[j + 1], 256) > 0) {
+                swap(&paths[j], &paths[j + 1]);
+            }
+        }
+    }
+}
+
 void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 {
 	int path_count;
+	int err;
+
+	err = 0; /* if err = 1 dont put "." that means the argument is something like this(ls -l dasdasd) \
+	this is to handle command like (ls -l) so that "." will add into the path if err remains 0 */
 	path_count = 0;
 	for (int av_pos = 1; av_pos < ac; av_pos++)
     {
@@ -57,9 +78,13 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 		else
 		{
 			check_path(av[av_pos], av[0], &path_count);
+			err = 1;
 		}
     }
-	initial_cmd->paths = malloc((path_count + 1) * sizeof(char *));
+	if (err == 0 && path_count == 0)
+		initial_cmd->paths = malloc((2) * sizeof(char *));
+	else
+		initial_cmd->paths = malloc((path_count + 1) * sizeof(char *));
 	path_count = 0;
 	for (int av_pos = 1; av_pos < ac; av_pos++)
     {
@@ -73,5 +98,12 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 			}
 		}
     }
+	bubble_sort(initial_cmd->paths, path_count);
+	if (err == 0 && path_count == 0)
+	{
+		initial_cmd->paths[path_count] = ft_strdup(".");
+		path_count++;
+	}
 	initial_cmd->paths[path_count] = NULL;
+	initial_cmd->path_len = path_count;
 }
