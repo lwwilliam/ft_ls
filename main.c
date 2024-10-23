@@ -2,25 +2,26 @@
 
 int main (int ac, char **av)
 {
-	struct stat sb;
+	struct s_cmd initial_cmd;
+	ft_memset(&initial_cmd, 0, sizeof(struct s_cmd));
 
-    for (int av_pos = 1; av_pos < ac; av_pos++)
-    {
-		if (av[av_pos][0] == '-')
-		{
-			printf("flags: %s\n", av[av_pos]);
-		}
-		else
-		{
-			if (stat(av[av_pos], &sb) == 0)
-			{
-				printf("path: %s\n", av[av_pos]);
-				printf("%d", sb.st_mode);
-			}
-			else
-			{
-				cannot_access(av[0], av[av_pos]);
-			}
-		}
+	init_parse(ac, av, &initial_cmd);
+
+
+	printf("l: %d\n", initial_cmd.l_flag);
+	printf("R: %d\n", initial_cmd.R_flag);
+	printf("a: %d\n", initial_cmd.a_flag);
+	printf("r: %d\n", initial_cmd.r_flag);
+	printf("t: %d\n", initial_cmd.t_flag);
+
+	for (int i = 0; initial_cmd.paths[i] != NULL; i++)
+	{
+		printf("str: %s\n", initial_cmd.paths[i]);
+	}
+
+	for (int i = 0; initial_cmd.paths[i] != NULL; i++) {
+        free(initial_cmd.paths[i]);
     }
+    free(initial_cmd.paths);
+	return 0;
 }

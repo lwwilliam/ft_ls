@@ -1,12 +1,12 @@
 NAME = ft_ls
 
-SRCS = main.c test.c
+SRCS = main.c parser.c
 
 OBJ_DIR = ./obj/
 
 OBJS = $(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
 
 LIBFT = ./libft/libft.a
 
