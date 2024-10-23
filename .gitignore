@@ -50,3 +50,8 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+obj/
+libft/obj/
+libft/libft.a
+ft_ls

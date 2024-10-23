@@ -1,15 +1,4 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/stat.h>
-
-void cannot_access(char *cmd, char *path)
-{
-	write(1, cmd, strlen(cmd));
-	write(1, ": cannot access '", 17);
-	write(1, path, strlen(path));
-	write(1, "': No such file or directory\n", 30);
-}
+#include "ft_ls.h"
 
 int main (int ac, char **av)
 {
