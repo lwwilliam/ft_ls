@@ -107,3 +107,11 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 	initial_cmd->paths[path_count] = NULL;
 	initial_cmd->path_len = path_count;
 }
+
+void free2darr(char **arr)
+{
+	for (int i = 0; arr[i] != NULL; i++) {
+        free(arr[i]);
+    }
+    free(arr);	
+}

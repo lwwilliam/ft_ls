@@ -1,6 +1,6 @@
 NAME = ft_ls
 
-SRCS = main.c parser.c
+SRCS = main.c parser.c color.c
 
 OBJ_DIR = ./obj/
 
