@@ -11,7 +11,7 @@
 #include <sys/ioctl.h>
 #include "libft/libft.h"
 
-# define TERM_WIDTH 150;
+# define TERM_WIDTH 120;
 // struct to store the initial arguments for ls
 // if flag is 1 (it exist)
 // path to store the path in the arguments
@@ -31,7 +31,19 @@ void cannot_access(char *cmd, char *path);
 void init_parse(int ac, char **av, struct s_cmd *initial_cmd);
 void bubble_sort(char **paths, int count);
 void free2darr(char **arr);
+
+// sub_dir.c
+void sub_dir(char *path, char **dir_paths, struct s_cmd *initial_cmd);
+char *path_join(char *path, char *dir);
+
+//sort.c
+void bubble_sort(char **paths, int count);
+void reverse_sort(char **paths, int count);
+void last_modified_sort(char **paths, int count, char *parent_dir);
+
+// main.c
 int read_dir(char *path, struct s_cmd *initial_cmd);
+void row_col(char **files, int count, int max_len, char *path, int whole_len);
 
 //colors
 void red ();

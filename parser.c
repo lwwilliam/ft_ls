@@ -43,23 +43,6 @@ void check_path(char *path, char *prog_name, int *path_count)
 	}
 }
 
-void swap(char **a, char **b) {
-    char *temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-// Bubble sort function
-void bubble_sort(char **paths, int count) {
-    for (int i = 0; i < count - 1; i++) {
-        for (int j = 0; j < count - i - 1; j++) {
-            if (ft_strncmp(paths[j], paths[j + 1], 256) > 0) {
-                swap(&paths[j], &paths[j + 1]);
-            }
-        }
-    }
-}
-
 void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 {
 	int path_count;
@@ -99,6 +82,10 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 		}
     }
 	bubble_sort(initial_cmd->paths, path_count);
+	if (initial_cmd->t_flag == 1)
+		last_modified_sort(initial_cmd->paths, path_count, "#");
+	if (initial_cmd->r_flag == 1)
+		reverse_sort(initial_cmd->paths, path_count);
 	if (err == 0 && path_count == 0)
 	{
 		initial_cmd->paths[path_count] = ft_strdup(".");
