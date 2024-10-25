@@ -30,12 +30,12 @@ int read_dir(char *path, struct s_cmd *initial_cmd)
 			dir_paths_count++;
         }
     }
+	dir_paths[dir_paths_count] = NULL;
 	bubble_sort(dir_paths, dir_paths_count);
 	if (initial_cmd->t_flag == 1)
 		last_modified_sort(dir_paths, dir_paths_count, path);
 	if (initial_cmd->r_flag == 1)
 		reverse_sort(dir_paths, dir_paths_count);
-	dir_paths[dir_paths_count] = NULL;
 	int max_len;
 	int whole_len;
 	max_len = 0;
