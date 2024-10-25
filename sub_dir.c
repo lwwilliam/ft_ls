@@ -25,6 +25,7 @@ void sub_dir(char *path, char **dir_paths, struct s_cmd *initial_cmd)
 		{
 			if ((sb.st_mode & S_IFMT) == S_IFDIR && ft_strncmp(dir_paths[i], "..", 2) != 0 && ft_strncmp(dir_paths[i], ".\0", 2) != 0)
 			{
+				write(1, "\n", 1);
 				write(1, new_path, ft_strlen(new_path));
 				write(1, ":\n", 2);
 				read_dir(new_path, initial_cmd);

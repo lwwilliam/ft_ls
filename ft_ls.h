@@ -9,6 +9,9 @@
 #include <dirent.h>
 #include <sys/sysmacros.h>
 #include <sys/ioctl.h>
+#include <pwd.h>
+#include <grp.h>
+#include <time.h>
 #include "libft/libft.h"
 
 # define TERM_WIDTH 120;
@@ -41,9 +44,16 @@ void bubble_sort(char **paths, int count);
 void reverse_sort(char **paths, int count);
 void last_modified_sort(char **paths, int count, char *parent_dir);
 
+// list_print.c
+void list_dir_len(struct stat *sb, int *n_link_len, int *o_name_len, int *o_group_len, int *size_len);
+void print_perms(struct stat *sb);
+
 // main.c
 int read_dir(char *path, struct s_cmd *initial_cmd);
 void row_col(char **files, int count, int max_len, char *path, int whole_len);
+void print_padding(char *str, int p_size);
+void print_link_name_size(struct stat *sb, int n_link_len, int o_name_len, int o_group_len, int size_len);
+void print_time(struct stat *sb);
 
 //colors
 void red ();

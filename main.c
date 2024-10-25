@@ -1,5 +1,50 @@
 #include "ft_ls.h"
 
+void list_dir(char *path, char **files, int count)
+{
+	// printf("size of %s %ld\n", path, sizeof(path));
+	struct stat sb;
+	int n_link_len = 0;
+	int o_name_len = 0;
+	int o_group_len = 0;
+	int size_len = 0;
+	long total_blocks = 0;
+	for (int i = 0; i < count; i++)
+	{
+		char *new_path = path_join(path, files[i]);
+		if (stat(new_path, &sb) == 0)
+		{
+			list_dir_len(&sb, &n_link_len, &o_name_len, &o_group_len, &size_len);
+			total_blocks += sb.st_blocks;
+			free(new_path);
+		}
+	}
+
+	char * block_char = ft_itoa(total_blocks / 2);
+	write(1, "total ", 7);
+	write(1, block_char, ft_strlen(block_char));
+	write(1, "\n", 1);
+	free(block_char);
+	for (int i = 0; i < count; i++)
+	{
+		char *new_path = path_join(path, files[i]);
+		if (stat(new_path, &sb) == 0)
+		{
+			print_perms(&sb);
+			print_link_name_size(&sb, n_link_len, o_name_len, o_group_len, size_len);
+			print_time(&sb);
+			if ((sb.st_mode & S_IFMT) == S_IFDIR)
+				blue();
+			else if (sb.st_mode & S_IXUSR || sb.st_mode & S_IXGRP || sb.st_mode & S_IXOTH)
+				green();
+			write(1 , files[i], ft_strlen(files[i]));
+			reset();
+			free(new_path);
+			write(1, "\n", 1);
+		}
+	}
+}
+
 int read_dir(char *path, struct s_cmd *initial_cmd)
 {
     DIR *dir;
@@ -48,8 +93,10 @@ int read_dir(char *path, struct s_cmd *initial_cmd)
 			max_len = len;
 	}
 
-	row_col(dir_paths, dir_paths_count, max_len, path, whole_len);
-	write(1, "\n", 1);
+	if (initial_cmd->l_flag == 1)
+		list_dir(path, dir_paths, dir_paths_count);
+	else
+		row_col(dir_paths, dir_paths_count, max_len, path, whole_len);
 	if(initial_cmd->R_flag == 1)
 		sub_dir(path, dir_paths, initial_cmd);
     closedir(dir);
