@@ -1,14 +1,7 @@
 #include "ft_ls.h"
 
-void cannot_access(char *cmd, char *path)
-{
-	write(1, cmd, ft_strlen(cmd));
-	write(1, ": cannot access '", 17);
-	write(1, path, strlen(path));
-	write(1, "': No such file or directory\n", 30);
-}
 
-void check_flag(struct s_cmd *initial_cmd, char flag)
+void check_flag(struct s_cmd *initial_cmd, char flag, char *prog_name)
 {
 	switch (flag)
 	{
@@ -27,6 +20,8 @@ void check_flag(struct s_cmd *initial_cmd, char flag)
 		case 't':
 			initial_cmd->t_flag = 1;
 			break;
+		default:
+			invalid_option(prog_name, flag);
 	}
 }
 
@@ -55,8 +50,10 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
     {
 		if (av[av_pos][0] == '-')
 		{
+			if (!ft_strncmp(av[av_pos], "--help", 7))
+				print_help(av[0]);
 			for (int i = 1; av[av_pos][i]; i++)
-				check_flag(initial_cmd, av[av_pos][i]);
+				check_flag(initial_cmd, av[av_pos][i], av[0]);
 		}
 		else
 		{

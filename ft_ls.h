@@ -30,7 +30,6 @@ typedef struct s_cmd
 } t_cmd;
 
 // parser.c
-void cannot_access(char *cmd, char *path);
 void init_parse(int ac, char **av, struct s_cmd *initial_cmd);
 void bubble_sort(char **paths, int count);
 void free2darr(char **arr);
@@ -47,6 +46,11 @@ void last_modified_sort(char **paths, int count, char *parent_dir);
 // list_print.c
 void list_dir_len(struct stat *sb, int *n_link_len, int *o_name_len, int *o_group_len, int *size_len);
 void print_perms(struct stat *sb);
+
+// error.c
+void cannot_access(char *cmd, char *path);
+void invalid_option(char *cmd, char invalid_flag);
+void print_help(char* cmd);
 
 // main.c
 int read_dir(char *path, struct s_cmd *initial_cmd);

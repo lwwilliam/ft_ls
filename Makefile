@@ -1,6 +1,6 @@
 NAME = ft_ls
 
-SRCS = main.c parser.c color.c sub_dir.c sort.c list_print.c
+SRCS = main.c parser.c color.c sub_dir.c sort.c list_print.c error.c
 
 OBJ_DIR = ./obj/
 
