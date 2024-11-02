@@ -83,6 +83,7 @@ void row_col(char **files, int count, int max_len, char *path, int whole_len)
 					write(1, "  ", 2);
 			}
 		}
-		write(1, "\n", 1);
+		if (max_len != 0)
+			write(1, "\n", 1);
 	}
 }

@@ -69,12 +69,12 @@ int read_dir(char *path, struct s_cmd *initial_cmd)
 	while ((dp = readdir(dir)) != NULL)
 	{
 		if (dp->d_name[0] != '.' || (dp->d_name[0] == '.' && initial_cmd->a_flag == 1))
-        {
+		{
 			file_name = dp->d_name;
 			dir_paths[dir_paths_count] = ft_strdup(file_name);
 			dir_paths_count++;
-        }
-    }
+		}
+	}
 	dir_paths[dir_paths_count] = NULL;
 	bubble_sort(dir_paths, dir_paths_count);
 	if (initial_cmd->t_flag == 1)
@@ -97,11 +97,11 @@ int read_dir(char *path, struct s_cmd *initial_cmd)
 		list_dir(path, dir_paths, dir_paths_count);
 	else
 		row_col(dir_paths, dir_paths_count, max_len, path, whole_len);
-	if(initial_cmd->R_flag == 1)
+	if (initial_cmd->R_flag == 1)
 		sub_dir(path, dir_paths, initial_cmd);
-    closedir(dir);
+	closedir(dir);
 	free2darr(dir_paths);
-    return (0);
+	return (0);
 }
 
 int main (int ac, char **av)
@@ -119,6 +119,8 @@ int main (int ac, char **av)
 			write(1, ":\n", 2);
 		}
 		read_dir(initial_cmd.paths[i], &initial_cmd);
+		if (initial_cmd.paths[i + 1] != NULL)
+			write(1, "\n", 1);
 	}
 
 	// printf("---------------------------------------------\n");
