@@ -69,7 +69,10 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 		}
     }
 	if (err == 0 && path_count == 0 && file_count == 0)
+	{
 		initial_cmd->paths = malloc((2) * sizeof(char *));
+		initial_cmd->non_dir = malloc((2) * sizeof(char *));
+	}
 	else
 	{
 		initial_cmd->paths = malloc((path_count + 1) * sizeof(char *));
@@ -97,8 +100,6 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 			}
 		}
 	}
-	initial_cmd->paths[path_count] = NULL;
-	initial_cmd->non_dir[i] = NULL;
 	bubble_sort(initial_cmd->paths, path_count);
 	if (initial_cmd->t_flag == 1)
 		last_modified_sort(initial_cmd->paths, path_count, "#");
@@ -109,6 +110,8 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 		initial_cmd->paths[path_count] = ft_strdup(".");
 		path_count++;
 	}
+	initial_cmd->paths[path_count] = NULL;
+	initial_cmd->non_dir[i] = NULL;
 	initial_cmd->path_len = path_count;
 	initial_cmd->non_dir_len = i;
 }

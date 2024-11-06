@@ -10,7 +10,11 @@ void list_dir(char *path, char **files, int count, int non_dir)
 	long total_blocks = 0;
 	for (int i = 0; i < count; i++)
 	{
-		char *new_path = path_join(path, files[i]);
+		char *new_path;
+		if (non_dir == 0)
+			new_path = path_join(path, files[i]);
+		else
+			new_path = ft_strdup(files[i]);
 		if (stat(new_path, &sb) == 0)
 		{
 			list_dir_len(&sb, &n_link_len, &o_name_len, &o_group_len, &size_len);
@@ -29,7 +33,11 @@ void list_dir(char *path, char **files, int count, int non_dir)
 	}
 	for (int i = 0; i < count; i++)
 	{
-		char *new_path = path_join(path, files[i]);
+		char *new_path;
+		if (non_dir == 0)
+			new_path = path_join(path, files[i]);
+		else
+			new_path = ft_strdup(files[i]);
 		if (stat(new_path, &sb) == 0)
 		{
 			print_perms(&sb);
@@ -42,7 +50,8 @@ void list_dir(char *path, char **files, int count, int non_dir)
 			write(1 , files[i], ft_strlen(files[i]));
 			reset();
 			free(new_path);
-			write(1, "\n", 1);
+			if (non_dir == 0 || !ft_strncmp(path, ".", 2))
+				write(1, "\n", 1);
 		}
 	}
 }
