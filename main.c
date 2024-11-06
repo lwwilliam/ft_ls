@@ -112,7 +112,8 @@ int main (int ac, char **av)
 	ft_memset(&initial_cmd, 0, sizeof(struct s_cmd));
 
 	init_parse(ac, av, &initial_cmd);
-	print_non_dir(&initial_cmd);
+	if (initial_cmd.non_dir_len > 0)
+		print_non_dir(&initial_cmd);
 
 	for (int i = 0; initial_cmd.paths[i] != NULL; i++)
 	{
