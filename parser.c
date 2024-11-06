@@ -25,12 +25,15 @@ void check_flag(struct s_cmd *initial_cmd, char flag, char *prog_name)
 	}
 }
 
-void check_path(char *path, char *prog_name, int *path_count)
+void check_path(char *path, char *prog_name, int *path_count, int *file_count)
 {
 	struct stat sb;
 	if (stat(path, &sb) == 0)
 	{
-		(*path_count)++;
+		if ((sb.st_mode & S_IFMT) != S_IFDIR)
+			(*file_count)++;
+		else
+			(*path_count)++;
 	}
 	else
 	{
@@ -41,13 +44,15 @@ void check_path(char *path, char *prog_name, int *path_count)
 void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 {
 	int path_count;
+	int file_count;
 	int err;
-	int non_dir;
+	int i;
 
 	err = 0; /* if err = 1 dont put "." that means the argument is something like this(ls -l dasdasd) \
 	this is to handle command like (ls -l) so that "." will add into the path if err remains 0 */
 	path_count = 0;
-	non_dir = 0;
+	file_count = 0;
+	i = 0;
 	for (int av_pos = 1; av_pos < ac; av_pos++)
     {
 		if (av[av_pos][0] == '-')
@@ -59,14 +64,18 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 		}
 		else
 		{
-			check_path(av[av_pos], av[0], &path_count);
+			check_path(av[av_pos], av[0], &path_count, &file_count);
 			err = 1;
 		}
     }
-	if (err == 0 && path_count == 0)
+	if (err == 0 && path_count == 0 && file_count == 0)
 		initial_cmd->paths = malloc((2) * sizeof(char *));
 	else
+	{
 		initial_cmd->paths = malloc((path_count + 1) * sizeof(char *));
+		initial_cmd->non_dir = malloc((file_count + 1) * sizeof(char *));
+	}
+
 	path_count = 0;
 	for (int av_pos = 1; av_pos < ac; av_pos++)
 	{
@@ -77,9 +86,8 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 			{
 				if ((sb.st_mode & S_IFMT) != S_IFDIR)
 				{
-					non_dir = 1;
-					write (1, av[av_pos], ft_strlen(av[av_pos]));
-					write (1, "  ", 2);
+					initial_cmd->non_dir[i] = ft_strdup(av[av_pos]);
+					i++;
 				}
 				else
 				{
@@ -89,15 +97,8 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 			}
 		}
 	}
-	if (non_dir != 0)
-		write (1, "\n", 2);
-	if (path_count > 0 && non_dir != 0)
-		write (1, "\n", 2);
-	if (non_dir != 0 && path_count == 1 && initial_cmd->R_flag == 0)
-	{
-		write(1, initial_cmd->paths[0], ft_strlen(initial_cmd->paths[0]));
-		write(1, ":\n", 2);
-	}
+	initial_cmd->paths[path_count] = NULL;
+	initial_cmd->non_dir[i] = NULL;
 	bubble_sort(initial_cmd->paths, path_count);
 	if (initial_cmd->t_flag == 1)
 		last_modified_sort(initial_cmd->paths, path_count, "#");
@@ -108,8 +109,8 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 		initial_cmd->paths[path_count] = ft_strdup(".");
 		path_count++;
 	}
-	initial_cmd->paths[path_count] = NULL;
 	initial_cmd->path_len = path_count;
+	initial_cmd->non_dir_len = i;
 }
 
 void free2darr(char **arr)

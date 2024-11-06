@@ -27,6 +27,8 @@ typedef struct s_cmd
 	int t_flag;
 	char **paths;
 	int path_len;
+	char **non_dir;
+	int non_dir_len;
 } t_cmd;
 
 // parser.c
@@ -52,7 +54,11 @@ void cannot_access(char *cmd, char *path);
 void invalid_option(char *cmd, char invalid_flag);
 void print_help(char* cmd);
 
+//non_dir.c
+void print_non_dir(struct s_cmd *initial_cmd);
+
 // main.c
+void list_dir(char *path, char **files, int count, int non_dir);
 int read_dir(char *path, struct s_cmd *initial_cmd);
 void row_col(char **files, int count, int max_len, char *path, int whole_len);
 void print_padding(char *str, int p_size);
