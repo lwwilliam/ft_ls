@@ -16,6 +16,10 @@ void green() {
   write(1, "\033[0;32m", 7);
 }
 
+void cyan() {
+  write(1, "\033[0;36m", 7);
+}
+
 void reset () {
   write(1, "\033[0m", 4);
 }

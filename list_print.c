@@ -29,7 +29,7 @@ void print_perms(struct stat *sb)
 	write(1, (sb->st_mode & S_IXGRP) ? "x" : "-" , 1);
 	write(1, (sb->st_mode & S_IROTH) ? "r" : "-" , 1);
 	write(1, (sb->st_mode & S_IWOTH) ? "w" : "-" , 1);
-	write(1, (sb->st_mode & S_IXOTH) ? "x" : "-" , 1);
+	write(1, (sb->st_mode & S_IXOTH) ? "x" : (sb->st_mode & __S_ISVTX) ? "T" : "-" , 1);
 	write(1, " ", 1);
 }
 
@@ -67,7 +67,7 @@ void print_time(struct stat *sb)
 	write(1, date_arr[1], ft_strlen(date_arr[1]));
 	write(1, " ", 1);
 	if (ft_strlen(date_arr[2]) < 2)
-		write(1, "0", 1);
+		write(1, " ", 1);
 	write(1, date_arr[2], ft_strlen(date_arr[2]));
 	write(1, " ", 1);
 	write(1, date_arr[3], ft_strlen(date_arr[3]));

@@ -23,7 +23,7 @@ void sub_dir(char *path, char **dir_paths, struct s_cmd *initial_cmd)
 		char *new_path = path_join(path, dir_paths[i]);
 		if (stat(new_path, &sb) == 0)
 		{
-			if ((sb.st_mode & S_IFMT) == S_IFDIR && ft_strncmp(dir_paths[i], "..", 2) != 0 && ft_strncmp(dir_paths[i], ".\0", 2) != 0)
+			if (S_ISDIR(sb.st_mode) && ft_strncmp(dir_paths[i], "..", 2) != 0 && ft_strncmp(dir_paths[i], ".\0", 2) != 0)
 			{
 				write(1, "\n", 1);
 				write(1, new_path, ft_strlen(new_path));
@@ -40,16 +40,14 @@ void print_file(char *path, char *file, int whole_len, int max_len)
 	char *new_path = path_join(path, file);
 	int term_width = TERM_WIDTH
 	struct stat sb;
-	if (stat(new_path, &sb) == 0)
+	if (lstat(new_path, &sb) == 0)
 	{
-		if ((sb.st_mode & S_IFMT) == S_IFDIR)
-		{
+		if (S_ISDIR(sb.st_mode))
 			blue();
-		} 
+		else if (S_ISLNK(sb.st_mode))
+			cyan();
 		else if (sb.st_mode & S_IXUSR || sb.st_mode & S_IXGRP || sb.st_mode & S_IXOTH)
-		{
 			green();
-		}
 		free(new_path);
 	}
 	write(1, file, ft_strlen(file));

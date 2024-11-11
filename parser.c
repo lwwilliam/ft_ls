@@ -30,7 +30,7 @@ void check_path(char *path, char *prog_name, int *path_count, int *file_count)
 	struct stat sb;
 	if (stat(path, &sb) == 0)
 	{
-		if ((sb.st_mode & S_IFMT) != S_IFDIR)
+		if (!S_ISDIR(sb.st_mode))
 			(*file_count)++;
 		else
 			(*path_count)++;
@@ -87,7 +87,7 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 			struct stat sb;
 			if (stat(av[av_pos], &sb) == 0)
 			{
-				if ((sb.st_mode & S_IFMT) != S_IFDIR)
+				if (!S_ISDIR(sb.st_mode))
 				{
 					initial_cmd->non_dir[i] = ft_strdup(av[av_pos]);
 					i++;

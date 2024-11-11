@@ -14,7 +14,7 @@
 #include <time.h>
 #include "libft/libft.h"
 
-# define TERM_WIDTH 120;
+# define TERM_WIDTH 150;
 // struct to store the initial arguments for ls
 // if flag is 1 (it exist)
 // path to store the path in the arguments
@@ -70,6 +70,7 @@ void red ();
 void yellow();
 void blue();
 void green();
+void cyan();
 void reset ();
 
 #endif

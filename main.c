@@ -15,7 +15,7 @@ void list_dir(char *path, char **files, int count, int non_dir)
 			new_path = path_join(path, files[i]);
 		else
 			new_path = ft_strdup(files[i]);
-		if (stat(new_path, &sb) == 0)
+		if (lstat(new_path, &sb) == 0)
 		{
 			list_dir_len(&sb, &n_link_len, &o_name_len, &o_group_len, &size_len);
 			total_blocks += sb.st_blocks;
@@ -25,7 +25,7 @@ void list_dir(char *path, char **files, int count, int non_dir)
 
 	if (non_dir == 0)
 	{
-		char * block_char = ft_itoa(total_blocks / 2);
+		char *block_char = ft_itoa(total_blocks / 2);
 		write(1, "total ", 7);
 		write(1, block_char, ft_strlen(block_char));
 		write(1, "\n", 1);
@@ -38,16 +38,29 @@ void list_dir(char *path, char **files, int count, int non_dir)
 			new_path = path_join(path, files[i]);
 		else
 			new_path = ft_strdup(files[i]);
-		if (stat(new_path, &sb) == 0)
+		if (lstat(new_path, &sb) == 0)
 		{
 			print_perms(&sb);
 			print_link_name_size(&sb, n_link_len, o_name_len, o_group_len, size_len);
 			print_time(&sb);
-			if ((sb.st_mode & S_IFMT) == S_IFDIR)
+			if (S_ISDIR(sb.st_mode))
 				blue();
+			else if (S_ISLNK(sb.st_mode))
+				cyan();
 			else if (sb.st_mode & S_IXUSR || sb.st_mode & S_IXGRP || sb.st_mode & S_IXOTH)
 				green();
-			write(1 , files[i], ft_strlen(files[i]));
+			write(1, files[i], ft_strlen(files[i]));
+			if (S_ISLNK(sb.st_mode))
+			{
+				char target[1024];
+				ssize_t len = readlink(new_path, target, sizeof(target) - 1);
+				if (len != -1)
+				{
+					target[len] = '\0';
+					write(1, " -> ", 4);
+					write(1, target, len);
+				}
+			}
 			reset();
 			free(new_path);
 			if (non_dir == 0 || !ft_strncmp(path, ".", 2))
@@ -58,23 +71,23 @@ void list_dir(char *path, char **files, int count, int non_dir)
 
 int read_dir(char *path, struct s_cmd *initial_cmd)
 {
-    DIR *dir;
-    struct dirent *dp;
-    char * file_name;
+	DIR *dir;
+	struct dirent *dp;
+	char * file_name;
 	char **dir_paths;
 	int dir_paths_count;
 
-    dir = opendir(path);
+	dir = opendir(path);
 	dir_paths_count = 0; 
-    while ((dp = readdir(dir)) != NULL)
+	while ((dp = readdir(dir)) != NULL)
 	{
 		if (dp->d_name[0] != '.' || (dp->d_name[0] == '.' && initial_cmd->a_flag == 1))
 		{
 			dir_paths_count++;
 		}
-    }
-    closedir(dir);
-    dir = opendir(path);
+	}
+	closedir(dir);
+	dir = opendir(path);
 	dir_paths = malloc((dir_paths_count + 1) * sizeof(char *));
 	dir_paths_count = 0;
 	while ((dp = readdir(dir)) != NULL)
