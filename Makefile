@@ -6,7 +6,7 @@ OBJ_DIR = ./obj/
 
 OBJS = $(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
 
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
+CFLAGS = -Wall -Werror -Wextra
 
 LIBFT = ./libft/libft.a
 
@@ -33,3 +33,11 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+
+# valgrind --leak-check=full \
+#          --show-leak-kinds=all \
+#          --track-origins=yes \
+#          --verbose \
+#          --log-file=valgrind-out.txt \
+#          ./ft_ls .

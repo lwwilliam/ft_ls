@@ -38,7 +38,7 @@ void sub_dir(char *path, char **dir_paths, struct s_cmd *initial_cmd)
 void print_file(char *path, char *file, int whole_len, int max_len)
 {
 	char *new_path = path_join(path, file);
-	int term_width = TERM_WIDTH
+	int term_width = TERM_WIDTH;
 	struct stat sb;
 	if (lstat(new_path, &sb) == 0)
 	{
@@ -61,7 +61,7 @@ void print_file(char *path, char *file, int whole_len, int max_len)
 
 void row_col(char **files, int count, int max_len, char *path, int whole_len)
 {
-	int term_width = TERM_WIDTH
+	int term_width = TERM_WIDTH;
 	int cols = term_width / (max_len + 2);
 	int rows = (count + cols - 1) / cols;
 	if (whole_len < term_width)

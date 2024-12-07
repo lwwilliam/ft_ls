@@ -55,3 +55,4 @@ obj/
 libft/obj/
 libft/libft.a
 ft_ls
+valgrind-out.txt
