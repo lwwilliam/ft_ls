@@ -1,6 +1,5 @@
 #include "ft_ls.h"
 
-
 void check_flag(struct s_cmd *initial_cmd, char flag, char *prog_name)
 {
 	switch (flag)
@@ -9,13 +8,13 @@ void check_flag(struct s_cmd *initial_cmd, char flag, char *prog_name)
 			initial_cmd->l_flag = 1;
 			break;
 		case 'R':
-			initial_cmd->R_flag = 1;
+			initial_cmd->r_flag = 1;
 			break;
 		case 'a':
 			initial_cmd->a_flag = 1;
 			break;
 		case 'r':
-			initial_cmd->r_flag = 1;
+			initial_cmd->rev_flag = 1;
 			break;
 		case 't':
 			initial_cmd->t_flag = 1;
@@ -103,7 +102,7 @@ void init_parse(int ac, char **av, struct s_cmd *initial_cmd)
 	bubble_sort(initial_cmd->paths, path_count);
 	if (initial_cmd->t_flag == 1)
 		last_modified_sort(initial_cmd->paths, path_count, "#");
-	if (initial_cmd->r_flag == 1)
+	if (initial_cmd->rev_flag == 1)
 		reverse_sort(initial_cmd->paths, path_count);
 	if (err == 0 && path_count == 0)
 	{

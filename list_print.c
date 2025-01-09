@@ -1,24 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list_print.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lwilliam <lwilliam@student.42kl.edu.my>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/09 09:57:59 by lwilliam          #+#    #+#             */
+/*   Updated: 2025/01/09 10:12:48 by lwilliam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-void list_dir_len(struct stat *sb, int *n_link_len, int *o_name_len, int *o_group_len, int *size_len)
+void	list_dir_len(struct stat *sb, int *n_link_len, int *o_name_len, int *o_group_len, int *size_len)
 {
-	struct passwd *pw = getpwuid(sb->st_uid);
-	struct group  *gr = getgrgid(sb->st_gid);
-	char *n_link = ft_itoa(sb->st_nlink);
+	struct passwd	*pw;
+	struct group	*gr;
+	char			*n_link;
+	char			*size;
+
+	pw = getpwuid(sb->st_uid);
+	gr = getgrgid(sb->st_gid);
+	n_link = ft_itoa(sb->st_nlink);
 	if (*n_link_len < (int)ft_strlen(n_link))
 		*n_link_len = ft_strlen(n_link);
 	free(n_link);
-	if (*o_name_len <  (int)ft_strlen(gr->gr_name))
+	if (*o_name_len < (int)ft_strlen(gr->gr_name))
 		*o_name_len = ft_strlen(gr->gr_name);
-	if (*o_group_len <  (int)ft_strlen(pw->pw_name))
+	if (*o_group_len < (int)ft_strlen(pw->pw_name))
 		*o_group_len = ft_strlen(pw->pw_name);
-	char *size = ft_itoa(sb->st_size);
-	if (*size_len <  (int)ft_strlen(size))
+	size = ft_itoa(sb->st_size);
+	if (*size_len < (int)ft_strlen(size))
 		*size_len = ft_strlen(size);
 	free(size);
 }
 
-void print_perms(struct stat *sb)
+void	print_perms(struct stat *sb)
 {
 	write(1, (S_ISDIR(sb->st_mode)) ? "d" : "-", 1);
 	write(1, (sb->st_mode & S_IRUSR) ? "r" : "-" , 1);
@@ -33,37 +50,49 @@ void print_perms(struct stat *sb)
 	write(1, " ", 1);
 }
 
-void print_padding(char *str, int p_size)
+void	print_padding(char *str, int p_size)
 {
+	int	i;
+
 	if ((int)ft_strlen(str) < p_size)
-		for (int i = p_size - ft_strlen(str); i > 0; i--)
+	{
+		i = p_size - ft_strlen(str);
+		while (i > 0)
+		{
 			write(1, " ", 1);
+			i--;
+		}
+	}
 	write(1, str, ft_strlen(str));
 	write(1, " ", 1);
-
 }
 
-void print_link_name_size(struct stat *sb, int n_link_len, int o_name_len, int o_group_len, int size_len)
+void	print_link_name_size(struct stat *sb, int n_link_len, int o_name_len, int o_group_len, int size_len)
 {
-	struct passwd *pw = getpwuid(sb->st_uid);
-	struct group  *gr = getgrgid(sb->st_gid);
+	struct passwd	*pw;
+	struct group	*gr;
+	char			*n_link;
+	char			*size;
 
-	char *n_link = ft_itoa(sb->st_nlink);
+	pw = getpwuid(sb->st_uid);
+	gr = getgrgid(sb->st_gid);
+	n_link = ft_itoa(sb->st_nlink);
 	print_padding(n_link, n_link_len);
 	free(n_link);
-
 	print_padding(gr->gr_name, o_name_len);
 	print_padding(pw->pw_name, o_group_len);
-
-	char *size = ft_itoa(sb->st_size);
+	size = ft_itoa(sb->st_size);
 	print_padding(size, size_len);
 	free(size);
 }
 
-void print_time(struct stat *sb)
+void	print_time(struct stat *sb)
 {
-	char *time_str = ctime(&sb->st_mtime);
-	char **date_arr = ft_split(time_str, ' ');
+	char	*time_str;
+	char	**date_arr;
+
+	time_str = ctime(&sb->st_mtime);
+	date_arr = ft_split(time_str, ' ');
 	write(1, date_arr[1], ft_strlen(date_arr[1]));
 	write(1, " ", 1);
 	if (ft_strlen(date_arr[2]) < 2)

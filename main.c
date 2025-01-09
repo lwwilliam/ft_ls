@@ -103,7 +103,7 @@ int read_dir(char *path, struct s_cmd *initial_cmd)
 	bubble_sort(dir_paths, dir_paths_count);
 	if (initial_cmd->t_flag == 1)
 		last_modified_sort(dir_paths, dir_paths_count, path);
-	if (initial_cmd->r_flag == 1)
+	if (initial_cmd->rev_flag == 1)
 		reverse_sort(dir_paths, dir_paths_count);
 	int max_len;
 	int whole_len;
@@ -121,7 +121,7 @@ int read_dir(char *path, struct s_cmd *initial_cmd)
 		list_dir(path, dir_paths, dir_paths_count, 0);
 	else
 		row_col(dir_paths, dir_paths_count, max_len, path, whole_len);
-	if (initial_cmd->R_flag == 1)
+	if (initial_cmd->r_flag == 1)
 		sub_dir(path, dir_paths, initial_cmd);
 	closedir(dir);
 	free2darr(dir_paths);
@@ -139,7 +139,7 @@ int main (int ac, char **av)
 
 	for (int i = 0; initial_cmd.paths[i] != NULL; i++)
 	{
-		if (initial_cmd.path_len > 1 || initial_cmd.R_flag == 1 || (initial_cmd.path_len == 1 && initial_cmd.non_dir_len > 0))
+		if (initial_cmd.path_len > 1 || initial_cmd.r_flag == 1 || (initial_cmd.path_len == 1 && initial_cmd.non_dir_len > 0))
 		{
 			write(1, initial_cmd.paths[i], ft_strlen(initial_cmd.paths[i]));
 			write(1, ":\n", 2);
@@ -151,9 +151,9 @@ int main (int ac, char **av)
 
 	// printf("---------------------------------------------\n");
 	// printf("l: %d\n", initial_cmd.l_flag);
-	// printf("R: %d\n", initial_cmd.R_flag);
+	// printf("R: %d\n", initial_cmd.r_flag);
 	// printf("a: %d\n", initial_cmd.a_flag);
-	// printf("r: %d\n", initial_cmd.r_flag);
+	// printf("r: %d\n", initial_cmd.rev_flag);
 	// printf("t: %d\n", initial_cmd.t_flag);
 
 	// for (int i = 0; initial_cmd.paths[i] != NULL; i++)
