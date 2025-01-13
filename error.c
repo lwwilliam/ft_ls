@@ -6,7 +6,7 @@
 /*   By: lwilliam <lwilliam@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 09:55:23 by lwilliam          #+#    #+#             */
-/*   Updated: 2025/01/09 09:56:00 by lwilliam         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:06:44 by lwilliam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,12 @@ void	print_help(char *cmd)
 	write(1, "[OPTION]... [FILE]...\n", 22);
 	write(1, "OPTIONS: -l    -R    -a    -r    -t\n", 37);
 	exit(1);
+}
+
+void	permission_denied(char *cmd, char *path)
+{
+	write(1, cmd, ft_strlen(cmd));
+	write(1, ": cannot open directory '", 25);
+	write(1, path, ft_strlen(path));
+	write(1, "': Permission denied\n", 21);
 }

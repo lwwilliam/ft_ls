@@ -25,9 +25,15 @@ void sub_dir(char *path, char **dir_paths, struct s_cmd *initial_cmd)
 		{
 			if (S_ISDIR(sb.st_mode) && ft_strncmp(dir_paths[i], "..", 2) != 0 && ft_strncmp(dir_paths[i], ".\0", 2) != 0)
 			{
-				write(1, "\n", 1);
-				write(1, new_path, ft_strlen(new_path));
-				write(1, ":\n", 2);
+				DIR *dir = opendir(new_path);
+				if(dir)
+				{
+					write(1, "\n", 1);
+					write(1, new_path, ft_strlen(new_path));
+					write(1, ":\n", 2);
+
+				}
+				closedir(dir);
 				read_dir(new_path, initial_cmd);
 			}
 			free(new_path);

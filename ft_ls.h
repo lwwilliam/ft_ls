@@ -6,7 +6,7 @@
 /*   By: lwilliam <lwilliam@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 09:38:26 by lwilliam          #+#    #+#             */
-/*   Updated: 2025/01/09 09:55:05 by lwilliam         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:13:15 by lwilliam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	print_perms(struct stat *sb);
 void	cannot_access(char *cmd, char *path);
 void	invalid_option(char *cmd, char invalid_flag);
 void	print_help(char *cmd);
+void	permission_denied(char *cmd, char *path);
 
 //non_dir.c
 void	print_non_dir(struct s_cmd *initial_cmd);

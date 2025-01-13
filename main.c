@@ -78,7 +78,12 @@ int read_dir(char *path, struct s_cmd *initial_cmd)
 	int dir_paths_count;
 
 	dir = opendir(path);
-	dir_paths_count = 0; 
+	if (!dir)
+	{
+		permission_denied("./ft_ls", path);
+		return(1);
+	}
+	dir_paths_count = 0;	
 	while ((dp = readdir(dir)) != NULL)
 	{
 		if (dp->d_name[0] != '.' || (dp->d_name[0] == '.' && initial_cmd->a_flag == 1))
@@ -139,11 +144,16 @@ int main (int ac, char **av)
 
 	for (int i = 0; initial_cmd.paths[i] != NULL; i++)
 	{
-		if (initial_cmd.path_len > 1 || initial_cmd.r_flag == 1 || (initial_cmd.path_len == 1 && initial_cmd.non_dir_len > 0))
+		DIR *dir = opendir(initial_cmd.paths[i]);
+		if (dir)
 		{
-			write(1, initial_cmd.paths[i], ft_strlen(initial_cmd.paths[i]));
-			write(1, ":\n", 2);
+			if (initial_cmd.path_len > 1 || initial_cmd.r_flag == 1 || (initial_cmd.path_len == 1 && initial_cmd.non_dir_len > 0))
+			{
+				write(1, initial_cmd.paths[i], ft_strlen(initial_cmd.paths[i]));
+				write(1, ":\n", 2);
+			}
 		}
+		closedir(dir);
 		read_dir(initial_cmd.paths[i], &initial_cmd);
 		if (initial_cmd.paths[i + 1] != NULL)
 			write(1, "\n", 1);
