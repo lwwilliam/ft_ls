@@ -38,15 +38,25 @@ void	list_dir_len(struct stat *sb, int *n_link_len, int *o_name_len, int *o_grou
 void	print_perms(struct stat *sb)
 {
 	write(1, (S_ISDIR(sb->st_mode)) ? "d" : "-", 1);
-	write(1, (sb->st_mode & S_IRUSR) ? "r" : "-" , 1);
-	write(1, (sb->st_mode & S_IWUSR) ? "w" : "-" , 1);
-	write(1, (sb->st_mode & S_IXUSR) ? "x" : "-" , 1);
-	write(1, (sb->st_mode & S_IRGRP) ? "r" : "-" , 1);
-	write(1, (sb->st_mode & S_IWGRP) ? "w" : "-" , 1);
-	write(1, (sb->st_mode & S_IXGRP) ? "x" : "-" , 1);
-	write(1, (sb->st_mode & S_IROTH) ? "r" : "-" , 1);
-	write(1, (sb->st_mode & S_IWOTH) ? "w" : "-" , 1);
-	write(1, (sb->st_mode & S_IXOTH) ? "x" : (sb->st_mode & __S_ISVTX) ? "T" : "-" , 1);
+	write(1, (sb->st_mode & S_IRUSR) ? "r" : "-", 1);
+	write(1, (sb->st_mode & S_IWUSR) ? "w" : "-", 1);
+	if (sb->st_mode & S_ISUID)
+		write(1, (sb->st_mode & S_IXUSR) ? "s" : "S", 1);
+	else
+		write(1, (sb->st_mode & S_IXUSR) ? "x" : "-", 1);
+	write(1, (sb->st_mode & S_IRGRP) ? "r" : "-", 1);
+	write(1, (sb->st_mode & S_IWGRP) ? "w" : "-", 1);
+	if (sb->st_mode & S_ISGID)
+		write(1, (sb->st_mode & S_IXGRP) ? "s" : "S", 1);
+	else
+		write(1, (sb->st_mode & S_IXGRP) ? "x" : "-", 1);
+	write(1, (sb->st_mode & S_IROTH) ? "r" : "-", 1);
+	write(1, (sb->st_mode & S_IWOTH) ? "w" : "-", 1);
+	if (sb->st_mode & S_ISVTX)
+		write(1, (sb->st_mode & S_IXOTH) ? "t" : "T", 1);
+	else
+		write(1, (sb->st_mode & S_IXOTH) ? "x" : "-", 1);
+
 	write(1, " ", 1);
 }
 
